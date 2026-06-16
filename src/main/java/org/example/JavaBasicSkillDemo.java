@@ -19,6 +19,15 @@ public class JavaBasicSkillDemo {
     public static void main(String[] args){
         System.out.println("===1.泛型与ArrayList练习===");
         genericAndArrayListTest();
+
+        System.out.println("\n========2.HashMap 单词统计================");
+        hashMapWordCountTest();
+
+        System.out.println("\n=========3.异常处理=====================");
+        execeptionTest();
+
+        System.out.println("\n===========4. IO文件读写（try-with-resources）=====================");
+        ioFileReadWriteTest();
     }
 
     /**
@@ -43,6 +52,70 @@ public class JavaBasicSkillDemo {
         System.out.println("泛型类内容：" + box.getItem());
     }
 
+    /**
+     * HashMap 统计单词出现次数
+     */
+    private static void hashMapWordCountTest(){
+        String text = "hello java hello world java java spring springboot";
+        String[] words = text.split(" ");
+
+        Map<String, Integer> countMap = new HashMap<>();
+
+        for(String word : words){
+            countMap.put(word, countMap.getOrDefault(word, 0) + 1);
+        }
+
+        // 遍历输出
+        for (Map.Entry<String, Integer> entry : countMap.entrySet()){
+            System.out.println(entry.getKey() + " : " + entry.getValue());
+        }
+    }
+
+    /**
+     * 异常处理： try-catch-finally、throw、throws、自定义异常
+     */
+    private static void execeptionTest(){
+        try{
+            // 可能抛出异常
+            checkAge(-1);
+        }catch (AgeIllegalException e) {
+            // 捕获自定义异常
+            System.err.println("捕获异常：" + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            // 必须执行：资源释放、日志记录等
+            System.out.println("finally 块：资源清理");
+        }
+    }
+
+    private static void checkAge(int age) throws AgeIllegalException {
+        if(age < 0) {
+            // 手动抛出异常
+            throw new AgeIllegalException("年龄不能为负数：" + age);
+        }
+    }
+
+    /**
+     * IO 流：文本文件读写，使用 try-with-resources自动关闭流
+     */
+    private static void ioFileReadWriteTest(){
+        // 会自动关闭资源， 无需 finally
+        try(BufferedReader br = new BufferedReader(new FileReader("input.txt"));
+            BufferedWriter bw = new BufferedWriter(new FileWriter("output.txt"))
+        ){
+            String line;
+            while((line = br.readLine()) != null){
+                System.out.println("读取内容：" + line);
+                bw.write(line);
+                bw.newLine();// 换行
+            }
+            System.out.println("文件写入完成！");
+        } catch(IOException e){
+            // 异常不能空处理
+            e.printStackTrace();
+        }
+    }
+
     // ==============泛型类========================
     static class Box<T>{
         private T item;
@@ -54,6 +127,14 @@ public class JavaBasicSkillDemo {
             this.item = item;
         }
     }
+
+    // ===========自定义异常===================
+    static class AgeIllegalException extends Exception {
+        public AgeIllegalException(String message) {
+            super(message);
+        }
+    }
+
 }
 
 
