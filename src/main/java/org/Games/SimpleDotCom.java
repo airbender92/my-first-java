@@ -1,10 +1,12 @@
 package org.Games;
 
+import java.util.ArrayList;
+
 public class SimpleDotCom {
-    int[] locationCells;
+    ArrayList<Integer> locationCells;
     int numOfHits = 0;
 
-    public void setLocationCells(int[] locs){
+    public void setLocationCells(ArrayList<Integer> locs){
         locationCells = locs;
     }
 
@@ -16,11 +18,12 @@ public class SimpleDotCom {
             if(guess == cell){
                 result = "hit";
                 numOfHits++;
+                locationCells.remove(Integer.valueOf(cell));
                 break;
             }
         }
 
-        if(numOfHits == locationCells.length){
+        if(locationCells.size() == 0){
             result = "kill";
         }
         System.out.println(result);
